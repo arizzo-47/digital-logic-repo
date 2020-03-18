@@ -1,0 +1,35 @@
+# Hello, World!
+
+
+	.data ## Data declaration section
+## String to prompt user:
+prompt_string:	.asciiz "\nEnter your name: \n"
+
+## String for hello
+hello:	.asciiz "Hello, "
+
+## Char array for input name
+name: .space 100
+	la	$t1, name	# get array address
+
+	.text 	## Assembly language intructions go in text segment
+main:		## Start of code section
+	li 	$v0, 4			# System call code for printing string = 4
+	la 	$a0, prompt_string 	# load address of string to be printed into $a0 	
+	syscall 			# call operating system to perform operation specified in $v0
+				  
+	li 	$v0, 8			# Read string
+	la	$a0, name		# Address of input buffer: t1
+	la	$a1, 100		# Maximum num chars: 100
+	syscall	
+	
+	li	$v0, 4			
+	la	$a0, hello		# Address of null terminated string to print
+	syscall
+	
+	li	$v0, 4
+	la	$a0, name
+	syscall
+
+	li $v0, 10			# terminate program
+	syscall

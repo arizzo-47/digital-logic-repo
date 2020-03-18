@@ -1,0 +1,42 @@
+# Anthony Rizzo
+# Homework 6
+# Digital Logic and Design
+# March 2020
+
+    .data
+prompt: .asciiz "Enter string: "
+input: .space 100
+
+    .text
+main:
+	# Print prompt to console
+    li $v0, 4       
+    la $a0, prompt
+    syscall
+
+	# Read user input, max character count = 100
+    li $v0, 8       
+    la $a0, input
+    li $a1, 100
+    syscall
+
+	# Move contents of a0 into s0
+    move $s0, $a0
+
+# Loop through string, skip spaces when printing
+loop:
+    lb $a0, 0($s0)		# Load byte $s0+0
+    addi $s0, $s0, 1		# Add one to $s0
+    beq $a0, 32, loop		# If $a0 is a space, jump to loop (32 decimal for space in ascii)
+    beq $a0, $zero, done   	# If end of line, end loop 
+
+    li $v0, 11		# Print character
+    syscall
+
+    j loop
+
+done:
+    
+	li $v0, 10	# terminate program
+	syscall
+
